@@ -153,19 +153,11 @@ namespace q1
                         }
                     }
                 }
-                
-                
-                Console.WriteLine(num);
-                Console.WriteLine(input[i]);
                 count += int.Parse(num);
-
             }
-
-
-
             Console.WriteLine(count);
-                Console.ReadKey();
-            }
+            Console.ReadKey();
+        }
         }
     }
 
