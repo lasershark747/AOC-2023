@@ -158,6 +158,6 @@ namespace q1
             Console.WriteLine(count);
             Console.ReadKey();
         }
-        }
     }
+}
 

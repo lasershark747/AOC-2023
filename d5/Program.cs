@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.IO;
+using System.Diagnostics;
 
 namespace d5
 {
@@ -11,6 +12,8 @@ namespace d5
     {
         static void Main(string[] args)
         {
+            Stopwatch stopwatch = new Stopwatch();
+            stopwatch.Start();
             string[] input = File.ReadAllLines("input.txt");
             int count = -1;
             string[] strings = input[0].Split(':');
@@ -64,7 +67,7 @@ namespace d5
                 }
             }
             
-            int num = 0;
+            long num = 0;
             List<long> list = new List<long>();
             long best = long.MaxValue;
 
@@ -92,7 +95,7 @@ namespace d5
                     {
                         best = see;
                     }
-                    if (num % 10000 == 0)
+                    if (num % 100000 == 0)
                     {
                         Console.WriteLine(num);
                     }
@@ -100,20 +103,14 @@ namespace d5
                     {
                         Console.Clear();
                     }
-                    if (num % 10000000 == 0)
-                    {
-                        Console.WriteLine(best);
-                    }
-
-                }
-
-                
-
+                }           
             }
             
 
             Console.WriteLine();
             Console.WriteLine(best);
+            stopwatch.Stop();
+            Console.WriteLine(stopwatch.Elapsed);
             Console.ReadKey();
         }
     }
