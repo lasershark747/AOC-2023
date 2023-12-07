@@ -19,9 +19,6 @@ namespace d5
             string[] buffer2 = input[1].Split(':');
             string[] distance = buffer2[1].Split(' ');
 
-
-
-
             for (int i = 0; i < time.Length; i++)
             {
                 int wins = 0;
