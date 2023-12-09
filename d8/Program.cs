@@ -54,12 +54,13 @@ namespace d5
                 }
                 distance.Add(count);
             }
-
+            
 
             foreach (int i in distance)
             {
                 Console.WriteLine(i);
             }
+            
 
             //find lcm of these numbers 
 

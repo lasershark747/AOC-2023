@@ -12,7 +12,7 @@ namespace d5
         static void Main(string[] args)
         {
             string[] input = File.ReadAllLines("input.txt");
-            int count = 0;
+            long count = 0;
 
             for (int i = 0; i < input.Length; i++)
             {
