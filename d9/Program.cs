@@ -23,10 +23,6 @@ namespace d5
                     sequence.Add(long.Parse(array[j]));
                 }
                 count += findNext(sequence);
-
-
-
-
             }
 
             Console.WriteLine(count);
@@ -53,7 +49,6 @@ namespace d5
             }
 
             return difference + sequence[sequence.Count - 1];
-
         }
     }
 }
