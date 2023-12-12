@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.IO;
+using System.Diagnostics;
 
 namespace d5
 {
@@ -13,133 +14,90 @@ namespace d5
         {
             string[] input = File.ReadAllLines("input.txt");
             long count = 0;
-            List<List<char>> gears = new List<List<char>>();
-            List<List<int>> combos = new List<List<int>>();
+            List<string> gears = new List<string>();
+            List<string> combos = new List<string>();
 
             for (int i = 0; i < input.Length; i++)
             {
                 string[] split = input[i].Split(' ');
-                List<char> list = new List<char>();
-                foreach (char c in split[0])
-                {
-                    list.Add(c);
-                }
-                gears.Add(list);
-                string[] split2 = split[1].Split(',');
-                List<int> ints = new List<int>();
-                foreach (string s in split2)
-                {
-                    ints.Add(int.Parse(s));
-                }
-                combos.Add(ints);
+                gears.Add(split[0] + "?" + split[0] + "?" + split[0] + "?" + split[0] + "?" + split[0]);
+                combos.Add(split[1] + "," + split[1] + "," + split[1] + "," + split[1] + "," + split[1]);                
             }
-
-
-            List<List<string>> brokenGrears = new List<List<string>>();
-
+            Dictionary<(string, string), long> done = new Dictionary<(string, string), long>();
             for (int i = 0; i < gears.Count; i++)
             {
-                List<string> list = new List<string>();
-                string word = "";
-                foreach (char c in gears[i])
-                {
-                    if (c != '.')
-                    {
-                        word += c;
-                    }
-                    else if (word.Length > 0)
-                    {
-                        list.Add(word);
-                        word = "";
-                    }
-                }
-                list.Add(word);
-                brokenGrears.Add(list);
+                count += possibilities(gears[i], combos[i], done);
             }
 
-            for (int i = 0; i < brokenGrears.Count; i++)
-            {
-                int permitations = 0;
-                int size = 0;
-                foreach (int num in combos[i])
-                {
-                    size += num;
-                }
-
-                int length = 0;
-                foreach (string s in brokenGrears[i])
-                {
-                    length += s.Length;
-                }
-
-
-                if (length == size)
-                {
-                    permitations++;
-                }
-                else if (size < length)
-                {
-                    int start = 0;
-                    while (true)
-                    {
-                        int currentCell = 0;
-                        int currentSize = 0;
-                        bool success = true;
-                        for (int a = 0; a < combos[i].Count; a++)
-                        {
-                            if (combos[i][a] + currentSize == brokenGrears[i][currentCell].Length)
-                            {
-                                currentCell++;
-                                if (a == combos.Count - 1)
-                                {
-                                    permitations++;
-                                }
-                            }
-                            else if (combos[i][a] + currentSize < brokenGrears[i][currentCell].Length)
-                            {
-                                currentSize += combos[i][a] + 1;
-                                if (a == combos.Count - 1)
-                                {
-                                    permitations++;
-                                }
-                            }
-                            else if (combos[i][a] + currentSize > brokenGrears[i][currentCell].Length)
-                            {
-                                currentCell++;
-                                a--;
-
-                            }
-                            if (brokenGrears[i].Count <= currentCell)
-                            {
-                                a = 1000;
-                                success = false;
-                            }
-                        }
-
-                        if (success == false)
-                        {
-                            start++;
-                        }
-                        if (start + size > length)
-                        {
-                            break;
-                        }
-
-                    }
-                }
-                else if (length > size)
-                {
-
-                }
-                Console.WriteLine(permitations);
-                count += permitations;
-            }
-
+            
             Console.WriteLine(count);
             Console.ReadKey();
         }
+        static long possibilities(string s, string nums, Dictionary<(string, string), long> done)
+        {
+            if (done.ContainsKey((s, nums)))
+                return done[(s, nums)];
 
+            string[] strings = nums.Split(',');
+            
+            if(s.Length==0)
+            {
+                if (nums.Length == 0)
+                    return 1;
+                else
+                    return 0;
+            }
 
+            if(nums.Length == 0) 
+            {
+                if (s.Contains("#"))
+                    return 0;
+                else
+                    return 1;
+                
+            }
+            
 
+            List<int> lengths = new List<int>();
+            foreach (string st in strings)
+            {
+                lengths.Add(int.Parse(st));
+            }
+
+            long permitations = 0;
+
+            if (s[0] == '.' || s[0] == '?') 
+            {
+                permitations += possibilities(s.Substring(1), nums, done);
+            }
+              
+            if (s[0] == '#' || s[0] == '?')
+            {
+                if (lengths[0] <= s.Length && !s.Substring(0, lengths[0]).Contains('.') && (lengths[0] == s.Length|| s[lengths[0]] == '.' || s[lengths[0]] == '?'))
+                {
+                    string buffer = "";
+                    for(int i = 1; i < lengths.Count; i++) 
+                    {
+                        buffer += lengths[i];
+                        if(i != lengths.Count - 1)
+                        {
+                            buffer += ",";
+                        }
+                    }
+                    if (s.Length > lengths[0] + 1)
+                    {
+                        permitations += possibilities(s.Substring(lengths[0] + 1), buffer, done);
+                    }
+                    else
+                    {
+                        permitations += possibilities("", buffer, done);
+                    }
+                }
+            }
+
+            done.Add((s, nums), permitations);
+            return permitations;
+        }
     }
 }
+ 
