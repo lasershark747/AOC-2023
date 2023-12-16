@@ -162,8 +162,6 @@ namespace d5
 
             return area;
         }
-
-
         static void findNext(int x, int y, char[,] grid, ref List<(int, int)> visited, ref Queue<(int, int)> queue)
         {
             List<char> possibleS = new List<char>

@@ -14,9 +14,10 @@ namespace d5
         {
             string[] input = File.ReadAllLines("input.txt");
             long count = 0;
-            int moves = 0;
+            int done = 0;
             List<List<char>> list = new List<List<char>>();
-            List<List<char>> start = new List<List<char>>();
+            List<string> states = new List<string>();
+            
 
             foreach (string line in input)
             {
@@ -27,129 +28,166 @@ namespace d5
                 }
                 list.Add(list2);
             }
-            List<string> dict = new List<string>();
+            states.Add(intoString(list));
 
-            for (int a = 0; a < 3; a++)
+            for (int a = 1; a <= 1000000000; a++)
             {
-                if (start == list && a != 0)
+
+                while (true) //north
                 {
-                    moves = a;
-                    break;
-                }
-                else
-                {
+                    int rolls = 0;
                     for (int i = 1; i < list.Count; i++)
                     {
                         for (int j = 0; j < list[i].Count; j++)
                         {
-                            if (list[i][j] == 'O')
+                            if (list[i][j] == 'O' && list[i - 1][j] == '.')
                             {
-                                if (list[i - 1][j] == '.')
-                                {
-                                    moves++;
-                                    list[i - 1][j] = 'O';
-                                    list[i][j] = '.';
-                                }
+                                list[i - 1][j] = 'O';
+                                list[i][j] = '.';
+                                rolls++;
                             }
                         }
                     }
+                    if (rolls == 0)
+                        break;
+                }
 
-                    for (int i = 0; i < list.Count; i++)
+                while (true) //west
+                {
+                    int rolls = 0;
+                    for (int i = 1; i < list[0].Count; i++)
                     {
-                        for (int j = 1; j < list[i].Count; j++)
+                        for (int j = 0; j < list.Count; j++)
                         {
-                            if (list[i][j] == 'O')
+                            if (list[j][i] == 'O' && list[j][i - 1] == '.')
                             {
-                                if (list[i][j - 1] == '.')
-                                {
-                                    moves++;
-                                    list[i][j - 1] = 'O';
-                                    list[i][j] = '.';
-                                }
+                                list[j][i - 1] = 'O';
+                                list[j][i] = '.';
+                                rolls++;
                             }
                         }
                     }
+                    if (rolls == 0)
+                        break;
+                }
 
-                    for (int i = 0; i < list.Count - 1; i++)
+                while (true)//south
+                {
+                    int rolls = 0;
+                    for (int i = list.Count - 2; i >= 0; i--)
                     {
                         for (int j = 0; j < list[i].Count; j++)
                         {
-                            if (list[i][j] == 'O')
+                            if (list[i][j] == 'O' && list[i + 1][j] == '.')
                             {
-                                if (list[i + 1][j] == '.')
-                                {
-                                    moves++;
-                                    list[i + 1][j] = 'O';
-                                    list[i][j] = '.';
-                                }
+                                list[i + 1][j] = 'O';
+                                list[i][j] = '.';
+                                rolls++;
                             }
                         }
                     }
+                    if (rolls == 0)
+                        break;
+                }
 
-                    for (int i = 0; i < list.Count; i++)
+                while (true)//east
+                {
+                    int rolls = 0;
+                    for (int i = list[0].Count - 2; i >= 0; i--)
                     {
-                        for (int j = 0; j < list[i].Count - 1; j++)
+                        for (int j = 0; j < list.Count; j++)
                         {
-                            if (list[i][j] == 'O')
+                            if (list[j][i] == 'O' && list[j][i + 1] == '.')
                             {
-                                if (list[i][j + 1] == '.')
-                                {
-                                    moves++;
-                                    list[i][j + 1] = 'O';
-                                    list[i][j] = '.';
-                                }
+                                list[j][i + 1] = 'O';
+                                list[j][i] = '.';
+                                rolls++;
                             }
                         }
                     }
-                    string st = "";
-                    foreach (List<char> l in list)
-                    {
-                        string t = "";
-                        foreach (char c in l)
-                        {
-                            t += c;
-                        }
-                        Console.WriteLine(t);
-                    }
+                    if (rolls == 0)
+                        break;
+                }
+
+                /*
+                foreach(List<char> line in  list)
+                {
+                    foreach(char c in line)
+                        Console.Write(c);
                     Console.WriteLine();
                 }
+                Console.WriteLine();
+                */
+                ;
 
-                if (a % 100000 == 0)
+                if (states.IndexOf(intoString(list))>=0 && a != 0)
                 {
-                    Console.WriteLine(a);
+                    done = a;
+                    break;
                 }
 
+                states.Add(intoString(list));
+
+                
             }
 
-            /*
-            string s = dict[1000000000 % moves];
-            List<List<char>> hope = new List<List<char>>();
-            int num = 0;
-            for(int i = 0; i < input.Length; i++)
-            {
-                List<char> temp = new List<char>();
-                for(int j = 0; j < input[i].Length; j++)
-                {
-                    temp.Add(s[num]);
-                    num++;
-                }
-            }
+            Console.WriteLine(states.IndexOf(intoString(list)));
+            Console.WriteLine(done);
 
-            for (int i = 0; i < hope.Count; i++)
+            int index = (1000000000- states.IndexOf(intoString(list)))%(done-states.IndexOf(intoString(list))) + states.IndexOf(intoString(list));
+            Console.WriteLine(index);
+
+            list = intoList(states[index],list);
+
+
+
+
+            for (int i = 0; i < list.Count; i++)
             {
-                for (int j = 0; j < hope[i].Count; j++)
+                for (int j = 0; j < list[i].Count; j++)
                 {
-                    if (hope[i][j] == 'O')
+                    if (list[i][j] == 'O')
                     {
-                        count += hope.Count - i;
+                        count += list.Count - i;
                     }
                 }
             }
-            */
+
             Console.WriteLine();
             Console.WriteLine(count);
             Console.ReadKey();
         }
+
+        static string intoString(List<List<char>> input)
+        {
+            string s = "";
+            foreach (List<char> line in input)
+            {
+                foreach (char c in line)
+                {
+                    s += c;
+                }
+            }
+            return s;
+        }
+        static List<List<char>> intoList (string input, List<List<char>> grid)
+        {
+            List<List<char>> output = new List<List<char>>();
+            int count = 0;
+            for(int i = 0; i < grid.Count;i++)
+            {
+                List<char> temp = new List<char>();
+                for(int j = 0; j < grid[i].Count; j++)
+                {
+                    temp.Add(input[count]);
+                    count++;
+                }
+                output.Add(temp);
+            }
+
+            return output;
+        }
     }
 }
+
 
