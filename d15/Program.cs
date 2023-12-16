@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 using System.IO;
 
 namespace d5
-{ 
+{
     internal class Program
     {
         static void Main(string[] args)
