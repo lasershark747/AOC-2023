@@ -72,7 +72,6 @@ namespace d5
                         {
                             boxes[num].RemoveAt(b);
                         }
-
                     }
                 }
             }
