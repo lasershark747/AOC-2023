@@ -24,20 +24,12 @@ namespace d5
                     grid[i, j] = input[i][j];
                 }
             }
-
-
-
-            //P2
-
-
-
             
             int size = grid.GetLength(0);
             int steps = 26501365;
             int numOfGrids = steps / size;
 
             long total = 0;
-            
 
             Queue<(int, int, int)> queue = new Queue<(int, int, int)>();
             List<(int, int, int)> seen = new List<(int, int, int)>();
