@@ -38,7 +38,6 @@ namespace d5
         static int pathFinding(List<List<int>> grid, (int, int) start)
         {
             int output = 0;
-            List<(int, int, int, int, (int, int))> seen = new List<(int, int, int, int, (int, int))>();
             List<(int, int, int, (int, int))> seen2 = new List<(int, int, int, (int, int))>();
             List<(int, int, int, int, (int, int))> queue = new List<(int, int, int, int, (int, int))>
             {
@@ -62,56 +61,56 @@ namespace d5
                     break;
                 }
                 (int, int, int, (int, int)) temp = (y, x, movesInARow, direction);
-
-                if (!seen2.Contains(temp))
+                if (movesInARow < 10)
                 {
-                    seen.Add(current);
-                    seen2.Add(temp);
-
-                    if(heatLoss > distance)
+                    if (!seen2.Contains(temp))
                     {
-                        Console.WriteLine(heatLoss);
-                        distance= heatLoss;
-                    }
-                    //Console.WriteLine(current);
+                        seen2.Add(temp);
 
-                    int xd = direction.Item2;
-                    int yd = direction.Item1;
-
-                    if (movesInARow < 10 && direction != (0, 0))
-                    {
-                        if (x + xd >= 0 && x + xd < grid[0].Count && y + yd >= 0 && y + yd < grid.Count)
+                        if (heatLoss > distance)
                         {
-                            queue.Add((heatLoss + grid[y + direction.Item1][x + direction.Item2], y + yd, x + xd, movesInARow + 1, direction));
+                            Console.WriteLine(heatLoss);
+                            distance = heatLoss;
                         }
-                    }
 
-                    (int, int)[] moves = { (0, 1), (0, -1), (1, 0), (-1, 0) };
-                    if (movesInARow >= 4 || movesInARow==0)
-                    {
-                        foreach (var move in moves)
+
+                        int xd = direction.Item2;
+                        int yd = direction.Item1;
+
+                        if (movesInARow < 10 && direction != (0, 0))
                         {
-                            if (x + move.Item2 >= 0 && x + move.Item2 < grid[0].Count && y + move.Item1 >= 0 && y + move.Item1 < grid.Count)
+                            if (x + xd >= 0 && x + xd < grid[0].Count && y + yd >= 0 && y + yd < grid.Count)
                             {
-                                if ((yd, xd) != move && (-yd, -xd) != move)
+                                queue.Add((heatLoss + grid[y + direction.Item1][x + direction.Item2], y + yd, x + xd, movesInARow + 1, direction));
+                            }
+                        }
+
+                        (int, int)[] moves = { (0, 1), (0, -1), (1, 0), (-1, 0) };
+                        if (movesInARow >= 4 || movesInARow == 0)
+                        {
+                            foreach (var move in moves)
+                            {
+                                if (x + move.Item2 >= 0 && x + move.Item2 < grid[0].Count && y + move.Item1 >= 0 && y + move.Item1 < grid.Count)
                                 {
-                                    queue.Add((heatLoss + grid[y + move.Item1][x + move.Item2], y + move.Item1, x + move.Item2, 1, move));
+                                    if ((yd, xd) != move && (-yd, -xd) != move)
+                                    {
+                                        queue.Add((heatLoss + grid[y + move.Item1][x + move.Item2], y + move.Item1, x + move.Item2, 1, move));
+                                    }
                                 }
                             }
                         }
-                    }
 
-                    for (int i = queue.Count - 1; i > 0; i--)
-                    {
-                        if (queue[i].Item1 < queue[i - 1].Item1)
+                        for (int i = queue.Count - 1; i > 0; i--)
                         {
-                            (queue[i], queue[i - 1]) = (queue[i - 1], queue[i]);
+                            if (queue[i].Item1 < queue[i - 1].Item1)
+                            {
+                                (queue[i], queue[i - 1]) = (queue[i - 1], queue[i]);
+                            }
                         }
                     }
                 }
             }
 
-            Console.WriteLine(output);
             return output;
         }
 
