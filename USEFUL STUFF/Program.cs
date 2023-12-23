@@ -78,7 +78,7 @@ namespace d5
                         }
                     }
                 }
-                
+
                 if (node.Item1.Item2 + 1 < grid[0].Count)
                 {
                     if (grid[node.Item1.Item1][node.Item1.Item2] + 1 >= grid[node.Item1.Item1][node.Item1.Item2 + 1] && !visited.Contains((node.Item1.Item1, node.Item1.Item2 + 1)))
